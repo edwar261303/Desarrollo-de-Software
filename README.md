@@ -4,7 +4,7 @@
 - **Universidad:** Universidad Nacional de San Antonio Abad del Cusco
 - **Facultad:** De ingenieria electrica, electronica, informatica y mecanica
 - **Escuela Profesional:** Ingenieria Informatica y de Sistemas
-#### Docnete:
+#### Docente:
 - **Ing. Quintanilla Portugal Roxana Lisette**
 - **Ing. Vittali Quispe Surco**
 #### Colaboradores:
