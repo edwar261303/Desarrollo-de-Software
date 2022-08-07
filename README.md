@@ -23,9 +23,18 @@ Esta asu vez podra mostrar alumnos los alumnos nuevos, y en otra opcion los alum
 ### Implementado en:
 - Lenguaje:Php y html
 - Utilizando archivos ".csv"
-### Descripcion del problema
-El problema, tenemos dos tablas de alumnos con tutoria en 2021 y en otra alumnos matricualdos en 2022-I, 
-debemos obtener la diferencia de los conjuntos de datos, y asi tener los resultados necesarios.
+### Descripcion del problema y funcionalidades
+-Tenemos dos tablas de alumnos con tutoria en 2021 y en otra alumnos matricualdos en 2022-I, 
+ debemos obtener la diferencia de los conjuntos de datos, y asi tener los resultados necesarios.
+ ### Datos de entrada
+  -Archivo CSV Lista de alumnos matriculados en el presente semestre.
+  -Archivo CSV Lista de docentes para el presente semestre.
+  -Archivo CSV Distribución de tutorías del anterior semestre.
+ ### Resultados
+ -Se realizo la distribucion de los alumnos sin tuttores
+ -Se puede descargar los siguientes archivos
+      *Archivo CSV Lista de alumnos ya no son considerados en la tutoría (Alumnos no matriculados en el presente semestre).
+      *Archivo CSV Distribución balanceada de tutorías para el presente semestre.
 
 #### Descripcion
 Al ejecutar el archivo index.php, nos pide en un formulario la carga de archivos 
