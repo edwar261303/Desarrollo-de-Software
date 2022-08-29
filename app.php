@@ -89,7 +89,7 @@
                     <tbody>
                       <?php
                       if(isset($data1)){
-                        mostrar2($data1);
+                        separar_tabla_3_Col($data1);
                       }
                       ?>
                     </tbody>
@@ -120,7 +120,7 @@
                       <?php
                       if(isset($data2)){
                         usort($data2, "cmp_codigo");
-                        mostrar($data2);
+                        separar_tabla_2_Col($data2);
                       }
                       ?>
                     </tbody>
@@ -150,7 +150,7 @@
                       <?php
                       if (isset($data3)) {
                         usort($data3, "cmp_codigo");
-                        mostrar($data3);
+                        separar_tabla_2_Col($data3);
                       }
                       ?>
                     </tbody>
@@ -193,7 +193,7 @@
                           $no_matriculados_sin_tutor[$i++] = [$alumno[0], $alumno[1]];
                         }
                         guardar_csv($no_matriculados_sin_tutor, "src/no_matriculados.csv");
-                        mostrar($no_matriculados);
+                        separar_tabla_2_Col($no_matriculados);
                       }
                       ?>
                     </tbody>
@@ -221,7 +221,7 @@
                       if(isset($data1) && isset($data3) && isset($data2)){
                         $nueva_dist = nueva_distribucion($data1, $data3, $data2);
                         guardar_csv($nueva_dist, "src/nueva_distribucion.csv");
-                        mostrar2($nueva_dist);
+                        separar_tabla_3_Col($nueva_dist);
                       }
                       ?>
                     </tbody>

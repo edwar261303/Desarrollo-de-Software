@@ -2,7 +2,7 @@
   include 'upload.php';
   include 'querys.php';
 
-  function mostrar($data) {
+  function separar_tabla_2_Col($data) {
     $i = 1;
     foreach($data as $alumno){
       echo '<tr>';
@@ -13,7 +13,7 @@
     }
   }
 
-  function mostrar2($data) {
+  function separar_tabla_3_Col($data) {
     $i = 1;
     foreach($data as $alumno){
       echo '<tr>';
