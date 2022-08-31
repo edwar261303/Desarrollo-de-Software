@@ -1,6 +1,5 @@
 <?php
   include 'src/main.php';
-  include 'src/save.php'
 ?>
 
 <!DOCTYPE html>
@@ -25,17 +24,16 @@
             <legend>Subir archivos</legend>
             <div class="input-group input-group-sm mb-3">
               <p>Distribucion de tutores:</p>
-              <input type="file" class="form-control" id="file1" aria-describedby="inputGroupFileAddon03" aria-label="Upload" name='file-1' required>
+              <input type="file" class="form-control" id="file1" aria-describedby="inputGroupFileAddon03" aria-label="Upload" name='file-distribucion' required>
             </div>
             <div class="input-group input-group-sm mb-3">
-              <p>Docentes:</p>
-              <input type="file" class="form-control" id="file2" aria-describedby="inputGroupFileAddon03" aria-label="Upload" name='file-2' required>
+              <p>Docentes tutores:</p>
+              <input type="file" class="form-control" id="file2" aria-describedby="inputGroupFileAddon03" aria-label="Upload" name='file-docentes' required>
             </div>
             <div class="input-group input-group-sm mb-3">
-              <p>Alumnos:</p>
-              <input type="file" class="form-control" id="file3" aria-describedby="inputGroupFileAddon03" aria-label="Upload" name='file-3' required>
+              <p>Alumnos matriculados:</p>
+              <input type="file" class="form-control" id="file3" aria-describedby="inputGroupFileAddon03" aria-label="Upload" name='file-alumnos' required>
             </div>
-
           </fieldset>
           <button type="submit" name="Submit">ACEPTAR</button>
         </form>
@@ -43,13 +41,13 @@
       <div id="main-right">
         <?php
           if(isset($_POST['Submit'])){
-            $archivo1 = $_FILES['file-1'];
-            $archivo2 = $_FILES['file-2'];
-            $archivo3 = $_FILES['file-3'];
+            $distribucion = $_FILES['file-distribucion'];
+            $lista_docentes = $_FILES['file-docentes'];
+            $lista_alumnos = $_FILES['file-alumnos'];
 
-            $data1 = cargar_doc2($archivo1['tmp_name'],5,0);
-            $data2 = cargar_doc1($archivo2['tmp_name'],0,1);
-            $data3 = cargar_doc1($archivo3['tmp_name'],0,1);
+            $distribucion_anterior = cargar_doc($distribucion['tmp_name'],5,0,TRUE);
+            $docentes = cargar_doc($lista_docentes['tmp_name'],0,1);
+            $alumnos = cargar_doc($lista_alumnos['tmp_name'],0,1);
           }
         ?>
         <div class='row'>
@@ -68,9 +66,9 @@
             <div class='tab-content p-3'>
               <div class='contenedor tab-pane active' id='DistTutor'>
                 <h2>
-                  <?php 
+                  <?php
                     if(isset($_POST['Submit'])){
-                      echo $archivo1['name'];
+                      echo $distribucion['name'];
                     }else{
                       echo 'TABLA 1';
                     }
@@ -88,8 +86,8 @@
                     </thead>
                     <tbody>
                       <?php
-                      if(isset($data1)){
-                        separar_tabla_3_Col($data1);
+                      if(isset($distribucion_anterior)){
+                        mostrar($distribucion_anterior,2);
                       }
                       ?>
                     </tbody>
@@ -101,7 +99,7 @@
                 <h2>
                   <?php 
                     if(isset($_POST['Submit'])){
-                      echo $archivo2['name'];
+                      echo $lista_docentes['name'];
                     }else{
                       echo 'TABLA 2';
                     }
@@ -118,9 +116,9 @@
                     </thead>
                     <tbody>
                       <?php
-                      if(isset($data2)){
-                        usort($data2, "cmp_codigo");
-                        separar_tabla_2_Col($data2);
+                      if(isset($docentes)){
+                        usort($docentes, "cmp_codigo");
+                        mostrar($docentes,1);
                       }
                       ?>
                     </tbody>
@@ -131,7 +129,7 @@
                 <h2>
                   <?php 
                     if(isset($_POST['Submit'])){
-                      echo $archivo3['name'];
+                      echo $lista_alumnos['name'];
                     }else{
                       echo 'TABLA 3';
                     }
@@ -148,9 +146,9 @@
                     </thead>
                     <tbody>
                       <?php
-                      if (isset($data3)) {
-                        usort($data3, "cmp_codigo");
-                        separar_tabla_2_Col($data3);
+                      if (isset($alumnos)) {
+                        usort($alumnos, "cmp_codigo");
+                        mostrar($alumnos,1);
                       }
                       ?>
                     </tbody>
@@ -159,7 +157,6 @@
               </div>
             </div>
           </div>
-
           <div class='col-6 p-3'>
             <ul class="nav nav-tabs pb-3">
               <li class="nav-item">
@@ -185,21 +182,22 @@
                     </thead>
                     <tbody>
                       <?php
-                      if(isset($data1) && isset($data3) && isset($data2)){
-                        $no_matriculados = alumnos_no_matriculados($data1, $data3);
+                      if(isset($distribucion_anterior) && isset($alumnos) && isset($docentes)){
+                        // $no_matriculados = alumnos_no_matriculados($distribucion_anterior, $alumnos);
+                        $no_matriculados = array_udiff($distribucion_anterior, $alumnos, "cmp_codigo");
                         $no_matriculados_sin_tutor = [];
                         $i=0;
                         foreach ($no_matriculados as $alumno){
                           $no_matriculados_sin_tutor[$i++] = [$alumno[0], $alumno[1]];
                         }
                         guardar_csv($no_matriculados_sin_tutor, "src/no_matriculados.csv");
-                        separar_tabla_2_Col($no_matriculados);
+                        mostrar($no_matriculados,1);
                       }
                       ?>
                     </tbody>
                   </table>
                 </div>
-                <a  href="src/descarga.php?archivo=1">Descargar csv</a>
+                <a  href="src/descarga.php?archivo=no_matriculados">Descargar csv</a>
               </div>
 
               <div class='contenedor tab-pane fade' id='NuevaDistribucion'>
@@ -218,22 +216,21 @@
                     </thead>
                     <tbody>
                       <?php
-                      if(isset($data1) && isset($data3) && isset($data2)){
-                        $nueva_dist = nueva_distribucion($data1, $data3, $data2);
+                      if(isset($distribucion_anterior) && isset($alumnos) && isset($docentes)){
+                        $nueva_dist = nueva_distribucion($distribucion_anterior, $alumnos, $docentes);
+                        usort($nueva_dist, "cmp_codigo");
                         guardar_csv($nueva_dist, "src/nueva_distribucion.csv");
-                        separar_tabla_3_Col($nueva_dist);
+                        mostrar($nueva_dist,2);
                       }
                       ?>
                     </tbody>
                   </table>
                 </div>
-                <a href="src/descarga.php?archivo=2">Descargar csv</a>
+                <a href="src/descarga.php?archivo=nueva_distribucion">Descargar csv</a>
               </div>
             </div>
-
           </div>  
-        </div>
-        
+        </div>        
       </div>
     </main>
   </body>
